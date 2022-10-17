@@ -15,12 +15,7 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        CreateHostBuilder(args).Build().Run();
-    }
-
-    public static IHostBuilder CreateHostBuilder(string[] args)
-    {
-        return Host.CreateDefaultBuilder(args)
+        Host.CreateDefaultBuilder(args)
             .ConfigureServices((hostContext, services) =>
             {
                 var contextOptions = new DbContextOptionsBuilder().UseNpgsql(hostContext.Configuration.GetConnectionString("DefaultConnection")).Options;
@@ -31,21 +26,21 @@ public class Program
                 services.AddTransient<ICartPositionRepository, CartPositionRepository>();
                 services.AddTransient<IGoodRepository, GoodRepository>();
 
-                services.AddDbContext<NpgSqlContext>(opt =>
-                {
-                    opt.UseNpgsql(hostContext.Configuration.GetConnectionString("DefaultConnection"));
-                }, ServiceLifetime.Transient, ServiceLifetime.Transient);
+                services.AddDbContext<NpgSqlContext>(opt => { opt.UseNpgsql(hostContext.Configuration.GetConnectionString("DefaultConnection")); },
+                    ServiceLifetime.Transient, ServiceLifetime.Transient);
 
-                var endpointsSection = hostContext.Configuration.GetSection("EndpointsConfiguration");
-                var endpointsConfig = endpointsSection.Get<EndpointsConfiguration>();
+                var endpointsConfig = hostContext.Configuration.GetSection("EndpointsConfiguration").Get<EndpointsConfiguration>();
 
-                var rabbitmqSection = hostContext.Configuration.GetSection("RabbitmqConfiguration");
-                var rabbitmqConfig = rabbitmqSection.Get<RabbitmqConfiguration>();
+                var rabbitmqConfig = hostContext.Configuration.GetSection("RabbitmqConfiguration").Get<RabbitmqConfiguration>();
 
                 services.AddMassTransit(x =>
                 {
                     x.AddConsumer<AddCartPositionConsumer>(typeof(AddCartPositionConsumerDefinition))
                         .Endpoint(cfg => { cfg.Name = endpointsConfig.CartServiceAddress; });
+
+                    x.AddConsumer<GetCartConsumer>(typeof(GetCartConsumerDefinition))
+                        .Endpoint(cfg => { cfg.Name = endpointsConfig.CartServiceAddress; });
+                    
                     x.UsingRabbitMq((context, cfg) =>
                     {
                         cfg.UseBsonSerializer();
@@ -57,6 +52,6 @@ public class Program
                         });
                     });
                 }).AddMassTransitHostedService(true);
-            });
+            }).Build().Run();
     }
 }

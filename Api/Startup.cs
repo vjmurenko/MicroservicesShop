@@ -24,10 +24,8 @@ namespace Api
             var routingSection = Configuration.GetSection("RoutingConfiguration");
             var routingConfig = routingSection.Get<RoutingConfiguration>();
             services.AddTransient<IRoutingConfiguration>(services => routingConfig);
-
-
-            var rabbitMqSection = Configuration.GetSection("RabbitMqConfiguration");
-            var rabbitMqConfig = rabbitMqSection.Get<RabbitMqConfiguration>();
+            
+            var rabbitMqConfig = Configuration.GetSection("RabbitMqConfiguration").Get<RabbitMqConfiguration>();
 
             services.AddMassTransit(cfg =>
             {

@@ -1,15 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk.Worker">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
-        <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <UserSecretsId>dotnet-OrkestratorService-FEBFD60C-C8A4-445A-8407-486F06BD58BD</UserSecretsId>
+        <Nullable>enable</Nullable>
+        <OutputType>Exe</OutputType>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="MassTransit" Version="7.2.4" />
-        <PackageReference Include="MassTransit.Analyzers" Version="7.2.4" />
         <PackageReference Include="MassTransit.AspNetCore" Version="7.2.4" />
         <PackageReference Include="MassTransit.EntityFrameworkCore" Version="7.2.4" />
         <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.2.4" />
@@ -25,4 +24,20 @@
         <PackageReference Include="Quartz" Version="3.3.3" />
         <PackageReference Include="Quartz.AspNetCore" Version="3.3.3" />
     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Api\Api.csproj" />
+      <ProjectReference Include="..\Contracts\Contracts.csproj" />
+      <ProjectReference Include="..\DeliveryService\DeliveryService.csproj" />
+      <ProjectReference Include="..\FeedbackService\FeedbackService.csproj" />
+      <ProjectReference Include="..\HistoryService\HistoryService.csproj" />
+      <ProjectReference Include="..\PaymentService\PaymentService.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="appsettings.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>
