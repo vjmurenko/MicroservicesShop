@@ -18,6 +18,13 @@ public class Program
                 // using var context = new NpgSqlContext(contextOptions);
                 // context.Database.Migrate();
                 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+                
+                var contextOptions = new DbContextOptionsBuilder()
+                    .UseNpgsql(hostContext.Configuration.GetConnectionString("DefaultConnection"))
+                    .Options;
+                
+                using var context = new HistoryDbContext(contextOptions);
+                context.Database.Migrate();
 
                 services.AddDbContext<HistoryDbContext>(opt => { opt.UseNpgsql(hostContext.Configuration.GetConnectionString("DefaultConnection")); },
                     ServiceLifetime.Transient, ServiceLifetime.Transient);
