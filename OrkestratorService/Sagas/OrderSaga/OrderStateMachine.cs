@@ -51,7 +51,7 @@ public class OrderStateMachine : MassTransitStateMachine<OrderState>
         During(CartRequest.Pending, WhenCartReturned());
         During(MoneyReservationRequest.Pending, WhenMoneyReserved());
         During(AwaitingConfirmation, WhenOrderConfirmed(), WhenOrderRejected());
-        During(MoneyReservationRequest.Pending, WhenMoneyReturned());
+        During(MoneyUnreservationRequest.Pending, WhenMoneyReturned());
         During(AwaitingDelivery, WhenOrderDelivered());
         During(AwaitingFeedback, WhenReceivedFeedback(), WhenIimeOutFeedback());
         During(FeedbackRequest.Pending, WhenFeedbackReceived());
@@ -179,7 +179,7 @@ public class OrderStateMachine : MassTransitStateMachine<OrderState>
                 context.Instance.CorrelationId,
                 context.Instance.TotalPrice,
                 context.Instance.SubmitDate,
-                context.Instance.CurrentState,
+                CurrentState = MoneyUnreservationRequest.Completed.Name,
                 context.Instance.Manager,
                 context.Instance.RejectDate,
                 context.Instance.RejectionReason,
@@ -220,11 +220,11 @@ public class OrderStateMachine : MassTransitStateMachine<OrderState>
                 context.Instance.CorrelationId,
                 context.Instance.TotalPrice,
                 context.Instance.SubmitDate,
-                context.Instance.CurrentState,
                 context.Instance.Manager,
                 context.Instance.RejectDate,
                 context.Instance.RejectionReason,
                 context.Instance.ConfirmDate,
+                CurrentState = OrderFeedbackTimeout.Received.Name
             }))
             .TransitionTo(ArchiveRequest.Pending);
     }
@@ -237,11 +237,11 @@ public class OrderStateMachine : MassTransitStateMachine<OrderState>
                 context.Instance.CorrelationId,
                 context.Instance.TotalPrice,
                 context.Instance.SubmitDate,
-                context.Instance.CurrentState,
                 context.Instance.Manager,
                 context.Instance.RejectDate,
                 context.Instance.RejectionReason,
                 context.Instance.ConfirmDate,
+                CurrentState = FeedbackRequest.Completed.Name
             }))
             .TransitionTo(ArchiveRequest.Pending);
     }

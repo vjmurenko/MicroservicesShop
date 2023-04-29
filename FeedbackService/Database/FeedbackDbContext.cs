@@ -7,7 +7,7 @@ public class FeedbackDbContext : DbContext
 {
     public DbSet<Feedback> Feebacks { get; set; }
 
-    public FeedbackDbContext(DbContextOptions<FeedbackDbContext> options) : base(options)
+    public FeedbackDbContext(DbContextOptions options) : base(options)
     {
     }
 

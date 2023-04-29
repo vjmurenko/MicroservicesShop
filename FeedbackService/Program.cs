@@ -17,8 +17,16 @@ public class Program
             {
                 var endppointsConfig = hostContext.Configuration.GetSection("EndpointsConfiguration").Get<EndpointsConfiguration>();
                 var rabbitConfig = hostContext.Configuration.GetSection("RabbitmqConfiguration").Get<RabbitmqConfiguration>();
+                var connectionString = hostContext.Configuration.GetConnectionString("DefaultConnection");
+                
+                var contextOptions = new DbContextOptionsBuilder()
+                    .UseNpgsql(connectionString)
+                    .Options;
+                
+                using var context = new FeedbackDbContext(contextOptions);
+                context.Database.Migrate();
 
-                services.AddDbContext<FeedbackDbContext>(s => s.UseNpgsql(hostContext.Configuration.GetConnectionString("DefaultConnection")),
+                services.AddDbContext<FeedbackDbContext>(s => s.UseNpgsql(connectionString),
                     ServiceLifetime.Transient, ServiceLifetime.Transient);
 
                 services.AddMassTransit(cfg =>
