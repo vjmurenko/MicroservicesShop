@@ -18,19 +18,19 @@ public class Program
         Host.CreateDefaultBuilder(args)
             .ConfigureServices((hostContext, services) =>
             {
-                var contextOptions = new DbContextOptionsBuilder().UseNpgsql(hostContext.Configuration.GetConnectionString("DefaultConnection")).Options;
+                var connectionString = hostContext.Configuration.GetConnectionString("DefaultConnection");
+                var contextOptions = new DbContextOptionsBuilder().UseNpgsql(connectionString).Options;
                 using var context = new NpgSqlContext(contextOptions);
                 context.Database.Migrate();
 
-                services.AddTransient<ICartRepository, CartRepository>();
-                services.AddTransient<ICartPositionRepository, CartPositionRepository>();
-                services.AddTransient<IGoodRepository, GoodRepository>();
+                services.AddScoped<ICartRepository, CartRepository>();
+                services.AddScoped<ICartPositionRepository, CartPositionRepository>();
+                services.AddScoped<IGoodRepository, GoodRepository>();
 
-                services.AddDbContext<NpgSqlContext>(opt => { opt.UseNpgsql(hostContext.Configuration.GetConnectionString("DefaultConnection")); },
+                services.AddDbContext<NpgSqlContext>(opt => { opt.UseNpgsql(connectionString); },
                     ServiceLifetime.Transient, ServiceLifetime.Transient);
 
                 var endpointsConfig = hostContext.Configuration.GetSection("EndpointsConfiguration").Get<EndpointsConfiguration>();
-
                 var rabbitmqConfig = hostContext.Configuration.GetSection("RabbitmqConfiguration").Get<RabbitmqConfiguration>();
 
                 services.AddMassTransit(x =>

@@ -18,7 +18,7 @@ public class Program
                     config.AddConsumer<ReserveMoneyConsumer>(typeof(ReserveMoneyConsumerDefinition))
                         .Endpoint(e => e.Name = endpointConfig.PaymentServiceAddress);
 
-                    config.AddConsumer<UnreserveMoneyConsumer>()
+                    config.AddConsumer<UnreserveMoneyConsumer>(typeof(UnreserveMoneyConsumerDefinition))
                         .Endpoint(e => e.Name = endpointConfig.PaymentServiceAddress);
 
                     config.UsingRabbitMq((context, conf) =>

@@ -18,7 +18,15 @@ public class Program
             {
                 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
                 var connectionString = hostContext.Configuration.GetConnectionString("DefaultConnection");
+
                 services.AddDbContext<OrderStateDbContext>(opt => opt.UseNpgsql(connectionString), ServiceLifetime.Transient, ServiceLifetime.Transient);
+                
+                var contextOptions = new DbContextOptionsBuilder()
+                    .UseNpgsql(connectionString)
+                    .Options;
+                
+                using var context = new OrderStateDbContext(contextOptions);
+                context.Database.Migrate();
 
                 var endpointsConfig = hostContext.Configuration.GetSection("EndpointsConfiguration").Get<EndpointsConfiguration>();
                 services.AddTransient(s => endpointsConfig);

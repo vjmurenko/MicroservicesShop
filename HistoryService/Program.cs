@@ -14,13 +14,17 @@ public class Program
         Host.CreateDefaultBuilder(args)
             .ConfigureServices((hostContext, services) =>
             {
-                // var contextOptions = new DbContextOptionsBuilder().UseNpgsql(hostContext.Configuration.GetConnectionString("DefaultConnection")).Options;
-                // using var context = new NpgSqlContext(contextOptions);
-                // context.Database.Migrate();
                 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+                var connectionString = hostContext.Configuration.GetConnectionString("DefaultConnection");
 
-                services.AddDbContext<HistoryDbContext>(opt => { opt.UseNpgsql(hostContext.Configuration.GetConnectionString("DefaultConnection")); },
-                    ServiceLifetime.Transient, ServiceLifetime.Transient);
+                var contextOptions = new DbContextOptionsBuilder()
+                    .UseNpgsql(connectionString)
+                    .Options;
+
+                using var context = new HistoryDbContext(contextOptions);
+                context.Database.Migrate();
+
+                services.AddDbContext<HistoryDbContext>(opt => { opt.UseNpgsql(connectionString); }, ServiceLifetime.Transient, ServiceLifetime.Transient);
 
                 var endpointsConfig = hostContext.Configuration.GetSection("EndpointsConfiguration").Get<EndpointsConfiguration>();
 
@@ -42,7 +46,6 @@ public class Program
                         });
                     });
                 }).AddMassTransitHostedService(true);
-                
             }).Build().Run();
     }
 }

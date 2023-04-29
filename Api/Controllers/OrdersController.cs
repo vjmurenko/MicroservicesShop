@@ -11,10 +11,10 @@ namespace Api.Controllers;
 [Route("api/orders")]
 public class OrdersController : ControllerBase
 {
-    private readonly ISendEndpointProvider _sendEndpointProvider;
+    private readonly ILogger<OrdersController> _logger;
     private readonly IPublishEndpoint _publishEndpoint;
     private readonly IRoutingConfiguration _routingConfiguration;
-    private readonly ILogger<OrdersController> _logger;
+    private readonly ISendEndpointProvider _sendEndpointProvider;
 
     public OrdersController(
         ISendEndpointProvider sendEndpointProvider,

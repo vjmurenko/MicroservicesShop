@@ -15,11 +15,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentService", "PaymentSe
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "Contracts", "{F652F2A3-2AAC-43FC-B10F-550045D9BAC0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "Api\Api.csproj", "{488302CA-FE9B-4179-8651-6B59A33869E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api", "Api\Api.csproj", "{488302CA-FE9B-4179-8651-6B59A33869E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrkestratorService", "OrkestratorService\OrkestratorService.csproj", "{8A0FB89D-0A14-4906-92DC-7BC696B157A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrkestratorService", "OrkestratorService\OrkestratorService.csproj", "{8A0FB89D-0A14-4906-92DC-7BC696B157A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "Contracts\Contracts.csproj", "{C861616A-2E2A-46AA-A352-75CDA8D69CC3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contracts", "Contracts\Contracts.csproj", "{C861616A-2E2A-46AA-A352-75CDA8D69CC3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,10 +63,10 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {CDC81DD2-E345-4853-9556-C83486E52509}
-	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C861616A-2E2A-46AA-A352-75CDA8D69CC3} = {F652F2A3-2AAC-43FC-B10F-550045D9BAC0}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CDC81DD2-E345-4853-9556-C83486E52509}
 	EndGlobalSection
 EndGlobal
